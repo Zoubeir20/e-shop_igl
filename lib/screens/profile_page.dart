@@ -5,6 +5,8 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 class ProfilePage extends StatelessWidget {
   final supabase = Supabase.instance.client;
 
+  ProfilePage({super.key});
+
   Future<Map<String, dynamic>> fetchUserProfile() async {
     // Get the current authenticated user's ID
     final userId = supabase.auth.currentUser?.id;
@@ -14,9 +16,7 @@ class ProfilePage extends StatelessWidget {
       final response =
           await supabase.from('users').select().eq('id', userId).single();
 
-      if (response != null) {
-        return response;
-      }
+      return response;
     }
 
     throw 'Unable to fetch user profile.';
@@ -80,10 +80,10 @@ class ProfilePage extends StatelessWidget {
                     backgroundImage: profileImage != null
                         ? NetworkImage(profileImage)
                         : null,
+                    backgroundColor: Colors.grey[200],
                     child: profileImage == null
                         ? Icon(Icons.person, size: 60, color: Colors.grey[600])
                         : null,
-                    backgroundColor: Colors.grey[200],
                   ),
                   SizedBox(height: 20),
                   // User's Name
@@ -109,22 +109,6 @@ class ProfilePage extends StatelessWidget {
                   ),
                   SizedBox(height: 20),
                   // Edit Profile Button
-                  ElevatedButton.icon(
-                    onPressed: () {
-                      // Handle Edit Profile Logic
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(content: Text('Edit Profile coming soon!')),
-                      );
-                    },
-                    icon: Icon(Icons.edit, size: 18),
-                    label: Text('Edit Profile'),
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: CustomColors.lightCream,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(8),
-                      ),
-                    ),
-                  ),
                 ],
               );
             },

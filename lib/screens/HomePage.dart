@@ -1,9 +1,12 @@
 import 'package:e_shop_igl/screens/DetailsPage.dart';
+import 'package:e_shop_igl/screens/FavPage.dart';
 import 'package:e_shop_igl/ui/custom_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 class Homepage extends StatefulWidget {
+  const Homepage({super.key});
+
   @override
   _HomePageState createState() => _HomePageState();
 }
@@ -22,11 +25,41 @@ class _HomePageState extends State<Homepage> {
     'Camera',
     'Desktop'
   ];
+  Set<int> favoriteDeviceIds = {}; // Track favorite devices by their IDs
 
   @override
   void initState() {
     super.initState();
     _fetchDevices();
+  }
+
+  Future<void> _addToFavorites(Map<String, dynamic> device) async {
+    try {
+      final response = await supabase.from('favorites').insert({
+        'device_id': device['id'], // Required: device ID
+        'name': device['name'], // Add name
+        'type': device['type'], // Add type
+        'status': device['status'], // Add status
+        'price': device['price'], // Add price
+        'image_url': device['image_url'], // Add image_url
+      });
+
+      if (response.error == null) {
+        setState(() {
+          favoriteDeviceIds
+              .add(device['id']); // Add the device ID to the favorites set
+        });
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('${device['name']} added to favorites!')),
+        );
+      } else {
+        throw response.error!.message;
+      }
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Failed to add to favorites: $e')),
+      );
+    }
   }
 
   // Fetch devices from the database
@@ -39,6 +72,7 @@ class _HomePageState extends State<Homepage> {
         filteredDevices = devices;
         isLoading = false;
       });
+      _fetchFavorites(); // Fetch existing favorites after loading devices
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text('Failed to load devices: $e')),
@@ -46,6 +80,19 @@ class _HomePageState extends State<Homepage> {
       setState(() {
         isLoading = false;
       });
+    }
+  }
+
+  // Fetch favorite devices from the database to track which items are favorited
+  Future<void> _fetchFavorites() async {
+    try {
+      final response = await supabase.from('favorites').select('device_id');
+      setState(() {
+        favoriteDeviceIds =
+            Set<int>.from(response.map((item) => item['device_id'] as int));
+      });
+    } catch (e) {
+      print('Error fetching favorites: $e');
     }
   }
 
@@ -97,13 +144,13 @@ class _HomePageState extends State<Homepage> {
                       onPressed: () {
                         _filterByCategory(category);
                       },
-                      child: Text(category),
                       style: ElevatedButton.styleFrom(
                         iconColor: CustomColors.lightCream,
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(8),
                         ),
                       ),
+                      child: Text(category),
                     ),
                   );
                 }).toList(),
@@ -162,6 +209,9 @@ class _HomePageState extends State<Homepage> {
 
   // Function to build a single device card
   Widget _buildDeviceCard(Map<String, dynamic> device) {
+    bool isFavorite = favoriteDeviceIds
+        .contains(device['id']); // Check if device is already in favorites
+
     return Card(
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(8),
@@ -218,13 +268,6 @@ class _HomePageState extends State<Homepage> {
                   ),
                 ),
                 SizedBox(height: 4),
-                Text(
-                  'Quantity: ${device['quantity'] ?? 'N/A'}',
-                  style: TextStyle(
-                    fontSize: 12,
-                    color: Colors.grey[600],
-                  ),
-                ),
                 SizedBox(height: 4),
                 Text(
                   'Price: ${device['price'] ?? 'N/A'}',
@@ -236,7 +279,26 @@ class _HomePageState extends State<Homepage> {
               ],
             ),
           ),
-          // Add button at the bottom of the card
+          // Add button at the bottom of the card (only visible if not already in favorites)
+          if (!isFavorite)
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: ElevatedButton(
+                onPressed: () {
+                  // Add device to favorites
+                  _addToFavorites(device);
+                },
+                style: ElevatedButton.styleFrom(
+                  iconColor: CustomColors.lightCream, // Button color
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                  padding: EdgeInsets.symmetric(vertical: 12),
+                ),
+                child: Text('Add to Favourites'),
+              ),
+            ),
+          // Show Details button (always visible)
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: ElevatedButton(
@@ -249,7 +311,6 @@ class _HomePageState extends State<Homepage> {
                   ),
                 );
               },
-              child: Text('Show Details'),
               style: ElevatedButton.styleFrom(
                 iconColor: CustomColors.lightCream, // Button color
                 shape: RoundedRectangleBorder(
@@ -257,6 +318,7 @@ class _HomePageState extends State<Homepage> {
                 ),
                 padding: EdgeInsets.symmetric(vertical: 12),
               ),
+              child: Text('Show Details'),
             ),
           ),
         ],

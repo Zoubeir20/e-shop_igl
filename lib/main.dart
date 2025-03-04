@@ -1,18 +1,15 @@
-import 'package:flutter/material.dart';
-import 'package:flutter_stripe/flutter_stripe.dart'; // Import flutter_stripe
-
-import 'package:supabase_flutter/supabase_flutter.dart';
+//import 'package:e_shop_igl/screens/admin_dashboard.dart';
 import 'package:e_shop_igl/screens/admin_dashboard.dart';
 import 'package:e_shop_igl/screens/login_screen.dart';
 import 'package:e_shop_igl/screens/signup_screen.dart';
 import 'package:e_shop_igl/screens/splashscreen.dart';
+import 'package:e_shop_igl/screens/FavPage.dart';
+import 'package:flutter/material.dart';
+
+import 'package:supabase_flutter/supabase_flutter.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-
-  // Initialize Stripe with the correct method
-  Stripe.publishableKey =
-      "pk_test_51QdaQqPExFY2KYYeaO2HvmtY39wWjBWBLPXXoEqoL2dwRvjO1PtmxO2A7EGKYVcdOLuZgGY4iKGINW5n6PhaIGeB00kApBWn8C"; // Your public key
 
   // Initialize Supabase
   await Supabase.initialize(
@@ -26,6 +23,8 @@ void main() async {
 }
 
 class MyApp extends StatelessWidget {
+  const MyApp({super.key});
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -36,6 +35,7 @@ class MyApp extends StatelessWidget {
         '/login': (context) => LoginScreen(),
         '/signup': (context) => SignupScreen(),
         '/dashboard': (context) => AdminDashboard(),
+        '/favorites': (context) => FavoritesPage(),
       },
     );
   }

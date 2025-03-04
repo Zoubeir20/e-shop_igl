@@ -1,9 +1,10 @@
 import 'package:e_shop_igl/screens/login_screen.dart';
 import 'package:e_shop_igl/ui/custom_colors.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/scheduler.dart';
 
 class SplashScreen extends StatefulWidget {
+  const SplashScreen({super.key});
+
   @override
   _SplashScreenState createState() => _SplashScreenState();
 }

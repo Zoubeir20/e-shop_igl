@@ -7,6 +7,8 @@ import 'package:supabase_flutter/supabase_flutter.dart'; // For authentication
 // Import custom colors
 
 class AdminDashboard extends StatefulWidget {
+  const AdminDashboard({super.key});
+
   @override
   _AdminDashboardState createState() => _AdminDashboardState();
 }

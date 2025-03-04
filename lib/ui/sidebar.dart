@@ -1,15 +1,17 @@
+import 'package:e_shop_igl/providers/favourites.dart';
 import 'package:e_shop_igl/screens/ChatPage.dart';
 import 'package:e_shop_igl/screens/FavPage.dart';
 import 'package:e_shop_igl/screens/HomePage.dart';
 import 'package:e_shop_igl/screens/PayScreen.dart';
 import 'package:e_shop_igl/screens/profile_page.dart';
 import 'package:e_shop_igl/ui/custom_colors.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class Sidebar extends StatefulWidget {
   final Function(Widget) onMenuItemSelected;
 
-  Sidebar({required this.onMenuItemSelected});
+  const Sidebar({super.key, required this.onMenuItemSelected});
 
   @override
   _SidebarState createState() => _SidebarState();
@@ -59,7 +61,8 @@ class _SidebarState extends State<Sidebar> {
           ),
           // Settings Menu Item
           ListTile(
-            leading: Icon(Icons.bus_alert, color: Colors.black), // Black Icon
+            leading:
+                Icon(CupertinoIcons.heart, color: Colors.black), // Black Icon
             title: Text('Favorites',
                 style: TextStyle(color: Colors.black)), // Black Text
             tileColor: _selectedIndex == 1
@@ -70,7 +73,7 @@ class _SidebarState extends State<Sidebar> {
                 RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
             contentPadding: EdgeInsets.symmetric(vertical: 15, horizontal: 20),
             onTap: () {
-              widget.onMenuItemSelected(Favpage());
+              widget.onMenuItemSelected(FavoritesPage());
               setState(() {
                 _selectedIndex = 2; // Update selected index
               });
@@ -78,7 +81,7 @@ class _SidebarState extends State<Sidebar> {
           ),
           // Analytics Menu Item
           ListTile(
-            leading: Icon(Icons.analytics, color: Colors.black), // Black Icon
+            leading: Icon(Icons.payment, color: Colors.black), // Black Icon
             title: Text('Payment',
                 style: TextStyle(color: Colors.black)), // Black Text
             tileColor: _selectedIndex == 2
@@ -97,7 +100,7 @@ class _SidebarState extends State<Sidebar> {
           ),
           // Profile Menu Item
           ListTile(
-            leading: Icon(Icons.person, color: Colors.black), // Black Icon
+            leading: Icon(Icons.message, color: Colors.black), // Black Icon
             title: Text('Chat',
                 style: TextStyle(color: Colors.black)), // Black Text
             tileColor: _selectedIndex == 3
@@ -108,7 +111,7 @@ class _SidebarState extends State<Sidebar> {
                 RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
             contentPadding: EdgeInsets.symmetric(vertical: 15, horizontal: 20),
             onTap: () {
-              widget.onMenuItemSelected(Chatpage());
+              widget.onMenuItemSelected(ChatScreen());
               setState(() {
                 _selectedIndex = 4; // Update selected index
               });

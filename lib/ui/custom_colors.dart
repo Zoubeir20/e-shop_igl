@@ -12,7 +12,7 @@ class CustomColors {
   // Sunset Orange (Warm and summery)
 // Sunset Orange (Warm and summery)
   static const Color sunsetOrange = Color.fromRGBO(
-      120, 120, 232, 1); // Sunset Orange (Alpha = 1 for full opacity)
+      31, 201, 15, 1); // Sunset Orange (Alpha = 1 for full opacity)
 
   // Soft Pastel Purple (Calming and nostalgic)
   static const Color pastelPurple =
@@ -20,5 +20,5 @@ class CustomColors {
 
   // Light Cream (Soft contrast to vibrant colors)
   static const Color lightCream =
-      Color.fromRGBO(97, 234, 255, 1); // Light Cream
+      Color.fromRGBO(235, 255, 189, 1); // Light Cream
 }

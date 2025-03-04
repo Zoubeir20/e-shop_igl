@@ -6,6 +6,8 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 // Import the custom colors file
 
 class SignupScreen extends StatefulWidget {
+  const SignupScreen({super.key});
+
   @override
   _SignupScreenState createState() => _SignupScreenState();
 }
@@ -179,7 +181,6 @@ class _SignupScreenState extends State<SignupScreen> {
               // Sign Up Button
               ElevatedButton(
                 onPressed: _signup,
-                child: Text('Sign Up'),
                 style: ElevatedButton.styleFrom(
                   minimumSize: Size(double.infinity, 50),
                   backgroundColor:
@@ -188,6 +189,7 @@ class _SignupScreenState extends State<SignupScreen> {
                     borderRadius: BorderRadius.circular(8),
                   ),
                 ),
+                child: Text('Sign Up'),
               ),
               SizedBox(height: 15),
               // Login Redirect
